@@ -3,6 +3,17 @@ const path = require('path');
 
 module.exports = function(grunt) {
 
+  function babelPreset(modules) {
+    return [[
+      'env',
+      {
+        loose: true,
+        modules: modules
+      }
+    ]];
+  }
+
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
@@ -44,10 +55,24 @@ module.exports = function(grunt) {
     babel: {
       options: {
         sourceMaps: 'inline',
-        loose: ['es6.modules'],
         auxiliaryCommentBefore: 'istanbul ignore next'
       },
+      amd: {
+        options: {
+          presets: babelPreset('amd')
+        },
+        files: [{
+          expand: true,
+          cwd: 'lib/',
+          src: '**/!(index).js',
+          dest: 'dist/amd/'
+        }]
+      },
+
       cjs: {
+        options: {
+          presets: babelPreset('commonjs')
+        },
         files: [{
           cwd: 'lib/',
           expand: true,
