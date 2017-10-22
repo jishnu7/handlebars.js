@@ -84,6 +84,21 @@ module.exports = function(grunt) {
     webpack: {
       options: {
         context: __dirname,
+        module: {
+          loaders: [
+            // the optional 'runtime' transformer tells babel to require the runtime instead of inlining it.
+            {
+              test: /\.jsx?$/,
+              exclude: /node_modules/,
+              use: {
+                loader: 'babel-loader',
+                options: {
+                  presets: babelPreset()
+                }
+              }
+            }
+          ]
+        },
         output: {
           path: path.resolve(__dirname, 'dist'),
           library: 'Handlebars',
